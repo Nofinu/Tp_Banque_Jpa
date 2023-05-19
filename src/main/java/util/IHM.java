@@ -24,17 +24,17 @@ public class IHM {
     private EntityManager em;
 
     public IHM() {
-       scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
 
-    public void start(){
+    public void start() {
         int entry;
-        do{
+        do {
             menu();
             entry = scanner.nextInt();
             scanner.nextLine();
 
-            switch (entry){
+            switch (entry) {
                 case 1:
                     addCustomer();
                     break;
@@ -53,14 +53,26 @@ public class IHM {
                 case 6:
                     deleteAgency();
                     break;
+                case 7:
+                    addAgencyToAccount();
+                    break;
+                case 8:
+                    addCustomerToAccount();
+                    break;
+                case 9:
+                    deleteCustomerToAccount();
+                    break;
                 case 0:
                     break;
+                default:
+                    System.out.println("entrer une valeur correcte");
+                    break;
             }
-        }while (entry != 0);
+        } while (entry != 0);
 
     }
 
-    public void menu(){
+    public void menu() {
         System.out.println("------- Menu -------");
         System.out.println("1-- creation d'utilisateur");
         System.out.println("2-- suppresion d'utilisateur");
@@ -73,13 +85,13 @@ public class IHM {
         System.out.println("----------------------");
         System.out.println("7-- ajouter agence a un compte");
         System.out.println("8-- ajouter utilisateur a un compte");
-        System.out.println("9-- supression d'une agence d'un compte");
-        System.out.println("10-- suppresion d'un utilisateur d'un compte");
+        System.out.println("9-- suppresion d'un utilisateur d'un compte");
+        System.out.println("----------------------");
         System.out.println("0-- quitter");
     }
 
     //fonction d'ajout
-    public void addCustomer (){
+    public void addCustomer() {
         System.out.println("-------- creation utilisateur -------");
         System.out.println("nom :");
         String lastName = scanner.nextLine();
@@ -89,16 +101,16 @@ public class IHM {
         String dateString = scanner.nextLine();
         LocalDate birthDate = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        Customer customer = new Customer(lastName,firstName,birthDate);
+        Customer customer = new Customer(lastName, firstName, birthDate);
         em = emf.createEntityManager();
-        customerDAO =new CustomerDAO(em);
-        if(customerDAO.Add(customer)){
+        customerDAO = new CustomerDAO(em);
+        if (customerDAO.Add(customer)) {
             System.out.println("utilisateur ajouté");
-        }else{
+        } else {
             System.out.println("erreure lors de l'ajout");
         }
     }
-    public void addAccount (){
+    public void addAccount() {
         System.out.println("-------- creation de compte -------");
         System.out.println("libelle :");
         String libelle = scanner.nextLine();
@@ -108,16 +120,16 @@ public class IHM {
         float balance = scanner.nextFloat();
         scanner.nextLine();
 
-        Account account = new Account(libelle,iban,balance);
+        Account account = new Account(libelle, iban, balance);
         em = emf.createEntityManager();
-        accountDAO =new AccountDAO(em);
-        if(accountDAO.Add(account)){
+        accountDAO = new AccountDAO(em);
+        if (accountDAO.Add(account)) {
             System.out.println("compte ajouté");
-        }else{
+        } else {
             System.out.println("erreure lors de l'ajout");
         }
     }
-    public void addAgency (){
+    public void addAgency() {
         System.out.println("-------- creation d'une agence -------");
         System.out.println("Adresse :");
         String adresse = scanner.nextLine();
@@ -125,16 +137,50 @@ public class IHM {
 
         Agency agency = new Agency(adresse);
         em = emf.createEntityManager();
-        agencyDAO =new AgencyDAO(em);
-        if(agencyDAO.Add(agency)){
+        agencyDAO = new AgencyDAO(em);
+        if (agencyDAO.Add(agency)) {
             System.out.println("agence ajouté");
+        } else {
+            System.out.println("erreure lors de l'ajout");
+        }
+    }
+    public void addCustomerToAccount() {
+        System.out.println("----- ajout d'un utilisateur a un compte");
+        System.out.println("id de l'utilisateur :");
+        int idUser = scanner.nextInt();
+
+        System.out.println("id du compte :");
+        int idAccount = scanner.nextInt();
+        scanner.nextLine();
+        em = emf.createEntityManager();
+        accountDAO = new AccountDAO(em);
+        if (accountDAO.addCustomerToAccount(idUser, idAccount)) {
+            System.out.println("utilisateur ajouter au comtpe");
+        } else {
+            System.out.println("erreure lors de l'ajout");
+        }
+
+    }
+    public void addAgencyToAccount() {
+        System.out.println("------- ajout d'une agence a un comtpe -------");
+        System.out.println("id de l'agence :");
+        int idAgency = scanner.nextInt();
+        System.out.println("id du compte :");
+        int idAccount = scanner.nextInt();
+        scanner.nextLine();
+
+        em = emf.createEntityManager();
+        accountDAO = new AccountDAO(em);
+
+        if(accountDAO.addAgencyToAccount(idAgency,idAccount)){
+            System.out.println("agence ajouté au compte");
         }else{
             System.out.println("erreure lors de l'ajout");
         }
     }
 
     //fonction de supression
-    public void deleteCustomer(){
+    public void deleteCustomer() {
         System.out.println("------- supression d'utilisateur ---------");
         System.out.println("id :");
         int id = scanner.nextInt();
@@ -142,13 +188,13 @@ public class IHM {
         em = emf.createEntityManager();
         customerDAO = new CustomerDAO(em);
 
-        if(customerDAO.delete(id)){
+        if (customerDAO.delete(id)) {
             System.out.println("utilisateur supprimer");
-        }else{
+        } else {
             System.out.println("erreure lors de la suppresion");
         }
     }
-    public void deleteAccount(){
+    public void deleteAccount() {
         System.out.println("------- supression de compte ---------");
         System.out.println("id :");
         int id = scanner.nextInt();
@@ -156,13 +202,13 @@ public class IHM {
         em = emf.createEntityManager();
         accountDAO = new AccountDAO(em);
 
-        if(accountDAO.delete(id)){
+        if (accountDAO.delete(id)) {
             System.out.println("compte supprimer");
-        }else{
+        } else {
             System.out.println("erreure lors de la suppresion");
         }
     }
-    public void deleteAgency(){
+    public void deleteAgency() {
         System.out.println("------- supression d'agence ---------");
         System.out.println("id :");
         int id = scanner.nextInt();
@@ -170,12 +216,27 @@ public class IHM {
         em = emf.createEntityManager();
         agencyDAO = new AgencyDAO(em);
 
-        if(agencyDAO.delete(id)){
+        if (agencyDAO.delete(id)) {
             System.out.println("agence supprimer");
+        } else {
+            System.out.println("erreure lors de la suppresion");
+        }
+    }
+    public void deleteCustomerToAccount (){
+        System.out.println("----- suppression d'unutilisateur d'un compte -----");
+        System.out.println("id de l'utilisateur");
+        int idUser = scanner.nextInt();
+        System.out.println("id du compte :");
+        int idAccount= scanner.nextInt();
+        scanner.nextLine();
+
+        em = emf.createEntityManager();
+        accountDAO = new AccountDAO(em);
+        if(accountDAO.deleteCustomerToAccount(idUser,idAccount)){
+            System.out.println("utilisateur suprimer");
         }else{
             System.out.println("erreure lors de la suppresion");
         }
     }
 
-    //
 }

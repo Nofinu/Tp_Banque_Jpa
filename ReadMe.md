@@ -39,3 +39,16 @@ Chaque client peut disposer de plusieurs comptes en banque.Malgré la particular
 
 >- Accout_Customer
 >>- table de liaison entre account et customer 
+
+
+### menu :
+        1-- creation d'utilisateur
+        2-- suppresion d'utilisateur
+        3-- creation de compte
+        4-- suppression de compte
+        5-- creation d'agence
+        6-- suppresion d'agence
+        7-- ajouter agence a un compte (permet d'ajouter a un compte une agence cree precedament)
+        8-- ajouter utilisateur a un compte (permet d'ajouter a un compte un utilisateur cree precedament)
+        9-- suppresion d'un utilisateur d'un compte (permet de retirer a un compte un utilisateur)
+        0-- quitter

@@ -16,7 +16,7 @@ public class Account {
     @Column(length = 27)
     private String iban;
     private float balance;
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "Account_Customer",joinColumns = @JoinColumn(name = "idAccount"),
             inverseJoinColumns = @JoinColumn(name = "idCustomer"))
     private List<Customer> customers;
