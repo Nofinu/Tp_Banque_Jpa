@@ -69,7 +69,7 @@ public class IHM {
                     break;
             }
         } while (entry != 0);
-
+        emf.close();
     }
 
     public void menu() {
